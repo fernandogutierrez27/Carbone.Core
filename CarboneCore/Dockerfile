@@ -18,10 +18,10 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY ["Carbone.Core/Carbone.Core.csproj", "Carbone.Core/"]
+COPY ["CarboneCore/Carbone.Core.csproj", "Carbone.Core/"]
 RUN dotnet restore "Carbone.Core/Carbone.Core.csproj"
 COPY . .
-WORKDIR "/src/Carbone.Core"
+WORKDIR "/src/CarboneCore"
 RUN dotnet build "Carbone.Core.csproj" -c Release -o /app/build
 
 FROM build AS publish
@@ -29,7 +29,7 @@ RUN dotnet publish "Carbone.Core.csproj" -c Release -o /app/publish
 
 FROM node:10-alpine as build-node
 WORKDIR /app/Script
-COPY Carbone.Core/Script/ .
+COPY CarboneCore/Script/ .
 RUN npm install
 
 FROM base AS final
